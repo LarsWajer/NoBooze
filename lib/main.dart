@@ -1,7 +1,8 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';  // Voeg deze regel toe
 
 void main() {
   runApp(MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 83, 243, 145)),
         ),
         home: MyHomePage(),
       ),
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
 
-   void getNext() {
+  void getNext() {
     current = WordPair.random();
     notifyListeners();
   }
@@ -44,9 +45,23 @@ class MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
-}
 
-// ...
+  var person;
+
+  Future<void> fetchPerson() async {
+    final response = await http.get(Uri.parse('https://swapi.dev/api/people/1/'));
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      person = jsonDecode(response.body);
+      notifyListeners();
+    } else {
+      throw Exception('Failed to load person');
+    }
+  }
+}
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -54,28 +69,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   var selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     Widget page;
-switch (selectedIndex) {
-  case 0:
-    page = GeneratorPage();
-    break;
-  case 1:
-    page = FavoritesPage();
-    break;
-  default:
-    throw UnimplementedError('no widget for $selectedIndex');
-}
+    switch (selectedIndex) {
+      case 0:
+        page = GeneratorPage();
+        break;
+      case 1:
+        page = FavoritesPage();
+        break;
+      default:
+        throw UnimplementedError('no widget for $selectedIndex');
+    }
 
     return Scaffold(
       body: Row(
         children: [
           SafeArea(
             child: NavigationRail(
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               extended: false,
               destinations: [
                 NavigationRailDestination(
@@ -92,13 +107,11 @@ switch (selectedIndex) {
                 setState(() {
                   selectedIndex = value;
                 });
-                
               },
             ),
           ),
           Expanded(
             child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
               child: page,
             ),
           ),
@@ -107,7 +120,6 @@ switch (selectedIndex) {
     );
   }
 }
-
 
 class GeneratorPage extends StatelessWidget {
   @override
@@ -147,14 +159,29 @@ class GeneratorPage extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              await appState.fetchPerson();
+            },
+            child: Text('Fetch Person'),
+          ),
+          if (appState.person != null) ...[
+            SizedBox(height: 20),
+            Text('Name: ${appState.person['name']}'),
+            Text('Height: ${appState.person['height']}'),
+            Text('Mass: ${appState.person['mass']}'),
+            Text('Hair color: ${appState.person['hair_color']}'),
+            Text('Skin color: ${appState.person['skin_color']}'),
+            Text('Eye color: ${appState.person['eye_color']}'),
+            Text('Birth year: ${appState.person['birth_year']}'),
+            Text('Gender: ${appState.person['gender']}'),
+          ]
         ],
       ),
     );
   }
 }
-
-// ...
-
 
 class BigCard extends StatelessWidget {
   const BigCard({
@@ -184,7 +211,6 @@ class BigCard extends StatelessWidget {
     );
   }
 }
-// ...
 
 class FavoritesPage extends StatelessWidget {
   @override
