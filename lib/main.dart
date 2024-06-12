@@ -1,6 +1,4 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,17 +11,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 83, 243, 145)),
-        ),
-        home: MyHomePage(),
+    return MaterialApp(
+      title: 'Namer App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 83, 243, 145)),
       ),
+      home: MyHomePage(),
     );
   }
 }
@@ -64,6 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         page = FavoritesPage();
         break;
+      case 2:
+        page = MedalsPage();
+        break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -74,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
           SafeArea(
             child: NavigationRail(
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              extended: false,
               destinations: [
                 NavigationRailDestination(
                   icon: Icon(Icons.home),
@@ -82,6 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 NavigationRailDestination(
                   icon: Icon(Icons.favorite),
                   label: Text('Favorites'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.emoji_events),
+                  label: Text('Medals'),
                 ),
               ],
               selectedIndex: selectedIndex,
@@ -98,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('images/leaves.jpg'), // Gebruik de juiste afbeelding
+                      image: AssetImage('assets/images/leaves.jpg'), // Gebruik de juiste afbeelding
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -113,11 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   left: 0,
                   right: 0,
                   child: Container(
-                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer,
-                    border: Border.all(
-                      width: 2,
-            
-                    )),
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -194,53 +193,60 @@ class GeneratorPage extends StatelessWidget {
 
 class FavoritesPage extends StatelessWidget {
   @override
+    Widget build(BuildContext context) {
+
+    return Center(
+      child: Text('Favorites Page'),
+    );
+  }
+}
+
+class MedalsPage extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    return Row(
+    return Column(
       children: [
-        Column(
-          children: [
-            SizedBox(height: 60), // Voeg ruimte toe tussen de balk en het eerste kaartje
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-              child: ScrollableCardWidget(
-                title: 'Motivation Quote:',
-                value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-              child: ScrollableCardWidget(
-                title: 'Motivation Quote:',
-                value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-              ),
-            ),
-
-          ],
-        ),
-        Column(
-          children: [
-            Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                  child: ScrollableCardWidget(
-                    title: 'Motivation Quote:',
-                    value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                  ),
-                ),
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                child: ScrollableCardWidget(
-                  title: 'Motivation Quote:',
-                  value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                ),
-              ),
-          ],
+        SizedBox(height: 60), // Voeg ruimte toe tussen de balk en het eerste kaartje
+        FutureBuilder<List<dynamic>>(
+          future: fetchMedals(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              List<dynamic>? medals = snapshot.data;
+              return Column(
+                children: medals!.map((medal) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                    child: CardWidget(
+                      title: medal['name'],
+                      value: medal['description'],
+                      icon: Icons.star, // Voeg een icoon toe, indien gewenst
+                      iconColor: Colors.yellow,
+                    ),
+                  );
+                }).toList(),
+              );
+            }
+          },
         ),
       ],
     );
   }
+
+  Future<List<dynamic>> fetchMedals() async {
+    final response = await http.get(Uri.parse('http://161.35.91.78/api/medals/'));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load medals');
+    }
+  }
 }
+
 
 class CardWidget extends StatelessWidget {
   final String title;
@@ -255,6 +261,8 @@ class CardWidget extends StatelessWidget {
     required this.icon,
     required this.iconColor,
   }) : super(key: key);
+
+  
 
   @override
   Widget build(BuildContext context) {
