@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/achtergrond.jpg'), // Vervang 'your_image.jpg' met de naam van jouw afbeelding
+                      image: AssetImage('assets/images/achtergrond.jpg'), // Gebruik de juiste afbeelding
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -110,21 +110,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Positioned(
-                  top: 16,
-                  right: 16,
+                  top: 0,
+                  left: 0,
+                  right: 0,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+                    color: Color.fromARGB(255, 13, 238, 129),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
                           'NoBooze',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 20,
                           ),
                         ),
@@ -151,6 +149,7 @@ class GeneratorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 60), // Voeg ruimte toe tussen de balk en het eerste kaartje
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: CardWidget(
