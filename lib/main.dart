@@ -74,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
           SafeArea(
             child: NavigationRail(
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              extended: false,
               destinations: [
                 NavigationRailDestination(
                   icon: Icon(Icons.home),
@@ -99,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/achtergrond.jpg'), // Gebruik de juiste afbeelding
+                      image: AssetImage('images/leaves.jpg'), // Gebruik de juiste afbeelding
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -114,7 +113,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   left: 0,
                   right: 0,
                   child: Container(
-                    color: Color.fromARGB(255, 13, 238, 129),
+                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer,
+                    border: Border.all(
+                      width: 2,
+            
+                    )),
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -194,8 +197,47 @@ class FavoritesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    return Center(
-      child: Text('Favorites Page'),
+    return Row(
+      children: [
+        Column(
+          children: [
+            SizedBox(height: 60), // Voeg ruimte toe tussen de balk en het eerste kaartje
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              child: ScrollableCardWidget(
+                title: 'Motivation Quote:',
+                value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              child: ScrollableCardWidget(
+                title: 'Motivation Quote:',
+                value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+              ),
+            ),
+
+          ],
+        ),
+        Column(
+          children: [
+            Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                  child: ScrollableCardWidget(
+                    title: 'Motivation Quote:',
+                    value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                  ),
+                ),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                child: ScrollableCardWidget(
+                  title: 'Motivation Quote:',
+                  value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
