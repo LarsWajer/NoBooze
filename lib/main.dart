@@ -88,20 +88,56 @@ class _MyHomePageState extends State<MyHomePage> {
               selectedIndex: selectedIndex,
               onDestinationSelected: (value) {
                 setState(() {
-                  selectedIndex = (value);
+                  selectedIndex = value;
                 });
               },
             ),
           ),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/achtergrond.jpg'),
-                  fit: BoxFit.cover,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/achtergrond.jpg'), // Vervang 'your_image.jpg' met de naam van jouw afbeelding
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-              child: page,
+                Positioned.fill(
+                  child: SingleChildScrollView(
+                    child: page,
+                  ),
+                ),
+                Positioned(
+                  top: 16,
+                  right: 16,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'NoBooze',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Image.asset(
+                          'assets/images/logo.png',
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -113,113 +149,54 @@ class _MyHomePageState extends State<MyHomePage> {
 class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            floating: false,
-            flexibleSpace: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 0.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'NoBooze',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Container(
-                    width: Theme.of(context).textTheme.headline6?.fontSize ?? 24,
-                    height: Theme.of(context).textTheme.headline6?.fontSize ?? 24,
-                    child: Image.asset('assets/images/logo.png'),
-                  ),
-                ],
-              ),
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: CardWidget(
+            title: 'Streak:',
+            value: '5',
+            icon: Icons.local_fire_department_sharp,
+            iconColor: Colors.red,
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                child: CardWidget(
-                  title: 'Streak:',
-                  value: '5',
-                  icon: Icons.local_fire_department_sharp,
-                  iconColor: Colors.red,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                child: CardWidget(
-                  title: 'Dry days:',
-                  value: '2',
-                  icon: Icons.cloud,
-                  iconColor: Colors.blueGrey,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                child: CardWidget(
-                  title: 'Money saved:',
-                  value: '€69420,00',
-                  icon: Icons.attach_money,
-                  iconColor: Colors.black,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                child: ScrollableCardWidget(
-                  title: 'Motivation Quote:',
-                  value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                ),
-              ),
-            ]),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: CardWidget(
+            title: 'Dry days:',
+            value: '2',
+            icon: Icons.cloud,
+            iconColor: Colors.blueGrey,
           ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: CardWidget(
+            title: 'Money saved:',
+            value: '€69420,00',
+            icon: Icons.attach_money,
+            iconColor: Colors.black,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: ScrollableCardWidget(
+            title: 'Motivation Quote:',
+            value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+          ),
+        ),
+      ],
     );
   }
 }
 
-
-
-class ScrollableCardWidget extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const ScrollableCardWidget({
-    super.key,
-    required this.title,
-    required this.value,
-  });
-
+class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250.0,
-      height: 300.0,
-      child: Card(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  value,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    var appState = context.watch<MyAppState>();
+
+    return Center(
+      child: Text('Favorites Page'),
     );
   }
 }
@@ -231,12 +208,12 @@ class CardWidget extends StatelessWidget {
   final Color iconColor;
 
   const CardWidget({
-    super.key,
+    Key? key,
     required this.title,
     required this.value,
     required this.icon,
     required this.iconColor,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -272,13 +249,43 @@ class CardWidget extends StatelessWidget {
   }
 }
 
-class FavoritesPage extends StatelessWidget {
+class ScrollableCardWidget extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const ScrollableCardWidget({
+    Key? key,
+    required this.title,
+    required this.value,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    return ListView(
-      children: [],
+    return Container(
+      width: 250.0,
+      height: 300.0,
+      child: Card(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  value,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
