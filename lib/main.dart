@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
+import 'package:provider/provider.dart'; // Importeer Provider
 
 void main() {
   runApp(MyApp());
@@ -11,25 +13,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Namer App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 83, 243, 145)),
+    return ChangeNotifierProvider(
+      create: (context) => MyAppState(),
+      child: MaterialApp(
+        title: 'Namer App',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 83, 243, 145)),
+        ),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }
 
 class MyAppState extends ChangeNotifier {
   var person;
+  int streak = 0;
+
+  MyAppState() {
+    _startStreakTimer(); // Start de timer wanneer de MyAppState wordt aangemaakt
+  }
 
   Future<void> fetchPerson() async {
-    final response =
-        await http.get(Uri.parse('https://swapi.dev/api/people/1/'));
+    final response = await http.get(Uri.parse('https://swapi.dev/api/people/1/'));
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
@@ -40,6 +48,13 @@ class MyAppState extends ChangeNotifier {
     } else {
       throw Exception('Failed to load person');
     }
+  }
+
+  void _startStreakTimer() {
+    Timer.periodic(Duration(minutes: 1), (Timer timer) {
+      streak += 1;
+      notifyListeners(); // Notificeer listeners bij elke update
+    });
   }
 }
 
@@ -103,8 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(
-                          'assets/images/leaves.jpg'), // Gebruik de juiste afbeelding
+                      image: AssetImage('assets/images/leaves.jpg'), // Gebruik de juiste afbeelding
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -120,8 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   right: 0,
                   child: Container(
                     color: Theme.of(context).colorScheme.primaryContainer,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -153,15 +166,16 @@ class _MyHomePageState extends State<MyHomePage> {
 class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
     return Column(
       children: [
-        SizedBox(
-            height: 60), // Voeg ruimte toe tussen de balk en het eerste kaartje
+        SizedBox(height: 60), // Voeg ruimte toe tussen de balk en het eerste kaartje
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: CardWidget(
             title: 'Streak:',
-            value: '5',
+            value: appState.streak.toString(),
             icon: Icons.local_fire_department_sharp,
             iconColor: Colors.red,
           ),
@@ -188,14 +202,14 @@ class GeneratorPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: ScrollableCardWidget(
             title: 'Motivation Quote:',
-            value:
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+            value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
           ),
         ),
       ],
     );
   }
 }
+
 
 class StoryPage extends StatelessWidget {
   @override
