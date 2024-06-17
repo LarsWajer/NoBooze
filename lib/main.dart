@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:provider/provider.dart'; // Importeer Provider
+import 'login_page.dart';
+import 'register_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +25,10 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 83, 243, 145)),
         ),
         home: MyHomePage(),
+        routes: {
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+      },
       ),
     );
   }
@@ -34,20 +40,6 @@ class MyAppState extends ChangeNotifier {
 
   MyAppState() {
     _startStreakTimer(); // Start de timer wanneer de MyAppState wordt aangemaakt
-  }
-
-  Future<void> fetchPerson() async {
-    final response = await http.get(Uri.parse('https://swapi.dev/api/people/1/'));
-
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
-    if (response.statusCode == 200) {
-      person = jsonDecode(response.body);
-      notifyListeners();
-    } else {
-      throw Exception('Failed to load person');
-    }
   }
 
   void _startStreakTimer() {
@@ -103,7 +95,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(Icons.emoji_events),
                   label: Text('Medals'),
                 ),
-              ],
+                NavigationRailDestination(
+                  icon: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: Text('Log out'),
+                  ),
+                  label: SizedBox.shrink(), // Verberg het label
+                ),],
               selectedIndex: selectedIndex,
               onDestinationSelected: (value) {
                 setState(() {
