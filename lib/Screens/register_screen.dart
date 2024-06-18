@@ -6,7 +6,6 @@ import '/Services/auth_services.dart';
 import '/Services/globals.dart';
 
 import '../rounded_button.dart';
-import 'home_screen.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 83, 243, 145),
         centerTitle: true,
         elevation: 0,
         title: const Text(

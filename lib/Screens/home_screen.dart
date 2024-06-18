@@ -5,13 +5,9 @@ import 'dart:async';
 import 'package:provider/provider.dart'; // Importeer Provider
 import 'login_screen.dart';
 import 'register_screen.dart';
-import '../scrollableCard.dart';
-import '../cardWidget.dart';
-import '../medalWidget.dart';
-
-void main() {
-  runApp(MyApp());
-}
+import '../cards/scrollableCard.dart';
+import '../cards/cardWidget.dart';
+import '../cards/medalWidget.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
