@@ -187,7 +187,7 @@ class GeneratorPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: CardWidget(
             title: 'Streak:',
-            value: appState.streak.toString(),
+            value: AuthServices.getUserInformation()['streak'].toString(),
             icon: Icons.local_fire_department_sharp,
             iconColor: Colors.red,
           ),
@@ -196,7 +196,7 @@ class GeneratorPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: CardWidget(
             title: 'Dry days:',
-            value: '2',
+            value: AuthServices.getUserInformation()['dry_days'].toString(),
             icon: Icons.cloud,
             iconColor: Colors.blueGrey,
           ),
@@ -205,7 +205,7 @@ class GeneratorPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: CardWidget(
             title: 'Money saved:',
-            value: AuthServices.getUserMap()['user_name'].toString(),
+            value: AuthServices.getUserInformation()['money_saved'].toString(),
             icon: Icons.attach_money,
             iconColor: Colors.black,
           ),
@@ -319,7 +319,9 @@ class MedalsPage extends StatelessWidget {
   }
 
   Future<List<dynamic>> fetchMedals() async {
-    final response = await http.get(Uri.parse(baseURL + 'medals/all'));
+    final response = await http.get(Uri.parse(baseURL +
+        'showMedals/' +
+        AuthServices.getUserInformation()['id'].toInt()));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);

@@ -45,8 +45,12 @@ class AuthServices {
     responseBody = body;
   }
 
-  static Map getUserMap() {
-    Map<String, dynamic> user = json.decode(responseBody);
+  static Map getUserInformation() {
+    Map<String, dynamic> response = json.decode(responseBody);
+    print('user');
+    Map<String, dynamic> user = response['user'];
+    print(user);
+    print(user[0]);
     return user;
   }
 }
