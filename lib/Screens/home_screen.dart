@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:nobooze/Services/auth_services.dart';
+import 'package:nobooze/Services/globals.dart';
 import 'package:nobooze/cards/InputCard.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -175,6 +177,7 @@ class GeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+    var auth_service = AuthServices();
 
     return Column(
       children: [
@@ -202,7 +205,7 @@ class GeneratorPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: CardWidget(
             title: 'Money saved:',
-            value: '€69420,00',
+            value: AuthServices.getUserMap()['user_name'].toString(),
             icon: Icons.attach_money,
             iconColor: Colors.black,
           ),
@@ -217,9 +220,8 @@ class GeneratorPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: ScrollableCardWidget(
-            title: 'Motivation Quote:',
-            value:
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+            title: 'Motivation:',
+            value: '',
           ),
         ),
         Padding(
@@ -307,9 +309,17 @@ class MedalsPage extends StatelessWidget {
     );
   }
 
+  Future<List<dynamic>> fetchUserInformation() async {
+    final response = await http.get(Uri.parse(baseURL + 'users/show/id'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load User-Information');
+    }
+  }
+
   Future<List<dynamic>> fetchMedals() async {
-    final response =
-        await http.get(Uri.parse('http://161.35.91.78/api/medals/all'));
+    final response = await http.get(Uri.parse(baseURL + 'medals/all'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -320,8 +330,7 @@ class MedalsPage extends StatelessWidget {
 }
 
 Future<List<dynamic>> fetchStory() async {
-  final response =
-      await http.get(Uri.parse('http://161.35.91.78/api/addictstories/all'));
+  final response = await http.get(Uri.parse(baseURL + 'addictstories/all'));
 
   if (response.statusCode == 200) {
     return json.decode(response.body);
