@@ -8,6 +8,10 @@ import 'package:http/http.dart' as http;
 
 import 'home_screen.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 

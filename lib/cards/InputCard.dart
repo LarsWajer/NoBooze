@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
-class InputCard extends StatelessWidget {
+class InputCard extends StatefulWidget {
   final String hintText;
-  final Function onPressed;
+  final Function(int) onPressed;
+
   const InputCard({
     Key? key,
     required this.hintText,
     required this.onPressed,
   }) : super(key: key);
+
+  @override
+  _InputCardState createState() => _InputCardState();
+}
+
+class _InputCardState extends State<InputCard> {
+  TextEditingController _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +30,28 @@ class InputCard extends StatelessWidget {
             child: Column(
               children: [
                 TextField(
+                  controller: _textController,
                   decoration: InputDecoration(
-                    hintText: hintText,
+                    hintText: widget.hintText,
                   ),
                 ),
-                ElevatedButton(onPressed: () {}, child: Text('Submit')),
+                ElevatedButton(
+                  onPressed: () {
+                    String enteredValue = _textController.text.trim();
+                    if (enteredValue.isNotEmpty) {
+                      int intValue = int.tryParse(enteredValue) ?? 0; // Convert to integer
+                      widget.onPressed(intValue); // Pass the integer value to onPressed function
+                      _textController.clear(); // Clear the text field
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please enter a value.'),
+                        ),
+                      );
+                    }
+                  },
+                  child: Text('Submit'),
+                ),
               ],
             ),
           ),

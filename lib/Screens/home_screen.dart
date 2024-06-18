@@ -12,12 +12,12 @@ import '../cards/scrollableCard.dart';
 import '../cards/cardWidget.dart';
 import '../cards/medalWidget.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
 
 class MyAppState extends ChangeNotifier {
   var person;
@@ -64,6 +66,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,11 +177,55 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class GeneratorPage extends StatelessWidget {
+class GeneratorPage extends StatefulWidget {
+  @override
+  State<GeneratorPage> createState() => _GeneratorPageState();
+}
+
+class _GeneratorPageState extends State<GeneratorPage> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var auth_service = AuthServices();
+    int savedMoney = 0; // Initialize saved money
+
+  Future<void> updateSavedMoney(int value) async {
+    // Update saved money with the new value via API
+    final response = await http.put(
+      Uri.parse(baseURL +
+        'users/update/' +
+        AuthServices.getUserInformation()['id'].toString()), // Replace with your API endpoint
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, int>{
+        'money_saved': value
+        }),
+    );
+
+    if (response.statusCode == 200) {
+      // Successful update
+      setState(() {
+        savedMoney = value; // Update the local savedMoney variable
+        
+        appState.notifyListeners();
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Saved money updated successfully!'),
+        ),
+      );
+    } else {
+      // Error handling
+      print(response.statusCode);
+      savedMoney = value;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update saved money.'),
+        ),
+      );
+    }
+  }
 
     return Column(
       children: [
@@ -214,7 +262,7 @@ class GeneratorPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: InputCard(
             hintText: 'Enter saved money here...',
-            onPressed: () {},
+            onPressed: (value) => updateSavedMoney(value), 
           ),
         ),
         Padding(
@@ -228,7 +276,7 @@ class GeneratorPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: InputCard(
             hintText: 'Enter your motivation here...',
-            onPressed: () {},
+            onPressed: (value) => updateSavedMoney(value), 
           ),
         ),
       ],
@@ -331,3 +379,4 @@ Future<List<dynamic>> fetchStory() async {
     throw Exception('Failed to load story');
   }
 }
+
