@@ -18,7 +18,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 83, 243, 145)),
         ),
         home: MyHomePage(),
+
         routes: {
           '/login': (context) => LoginScreen(),
           '/register': (context) => RegisterScreen(),
@@ -273,6 +274,7 @@ class _GeneratorPageState extends State<GeneratorPage> {
   @override
   Widget build(BuildContext context) {
     var auth_service = AuthServices();
+
 
     return Consumer<MoneySavedModel>(
       builder: (context, moneySavedModel, child) {
