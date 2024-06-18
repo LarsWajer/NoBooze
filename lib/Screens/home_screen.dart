@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:nobooze/cards/InputCard.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:provider/provider.dart'; // Importeer Provider
@@ -8,6 +9,10 @@ import 'register_screen.dart';
 import '../cards/scrollableCard.dart';
 import '../cards/cardWidget.dart';
 import '../cards/medalWidget.dart';
+
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
@@ -204,10 +209,24 @@ class GeneratorPage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: InputCard(
+            hintText: 'Enter saved money here...',
+            onPressed: () {},
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: ScrollableCardWidget(
             title: 'Motivation Quote:',
             value:
                 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: InputCard(
+            hintText: 'Enter your motivation here...',
+            onPressed: () {},
           ),
         ),
       ],

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:nobooze/screens/register_screen.dart';
 import '/Services/auth_services.dart';
 import '/Services/globals.dart';
 import '/rounded_button.dart';
@@ -28,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const RegisterScreen(),
+              builder: (BuildContext context) => const MyApp(),
             ));
       } else {
         errorSnackBar(context, responseMap.values.first);
