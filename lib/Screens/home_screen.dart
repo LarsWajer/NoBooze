@@ -309,19 +309,10 @@ class MedalsPage extends StatelessWidget {
     );
   }
 
-  Future<List<dynamic>> fetchUserInformation() async {
-    final response = await http.get(Uri.parse(baseURL + 'users/show/id'));
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to load User-Information');
-    }
-  }
-
   Future<List<dynamic>> fetchMedals() async {
     final response = await http.get(Uri.parse(baseURL +
-        'showMedals/' +
-        AuthServices.getUserInformation()['id'].toInt()));
+        'users/showMedals/' +
+        AuthServices.getUserInformation()['id'].toString()));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
