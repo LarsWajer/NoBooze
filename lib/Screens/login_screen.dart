@@ -7,6 +7,7 @@ import '/rounded_button.dart';
 import 'package:http/http.dart' as http;
 
 import 'home_screen.dart';
+import 'register_screen.dart';
 
 void main() {
   runApp(const MyApp());

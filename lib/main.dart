@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobooze/Screens/login_screen.dart'; // Importeer de juiste login_screen.dart
+import 'package:nobooze/Screens/register_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +18,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         // Definieer hier je thema-instellingen
       ),
-      home: const LoginScreen(), // Gebruik LoginScreen als home
+      home: const RegisterScreen(), // Gebruik LoginScreen als home
       routes: {
-        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        //'/login':
         // Voeg andere routes toe indien nodig
       },
     );
