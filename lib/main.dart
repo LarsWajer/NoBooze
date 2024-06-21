@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nobooze/Screens/login_screen.dart'; // Importeer de juiste login_screen.dart
+// Importeer de juiste login_screen.dart
 import 'package:nobooze/Screens/register_screen.dart';
 
 void main() {

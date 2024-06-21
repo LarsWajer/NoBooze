@@ -36,7 +36,7 @@ class _InputCardState extends State<InputCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 250,
       child: Card(
         

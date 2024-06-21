@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MoneySavedModel with ChangeNotifier {
-  double _moneySaved = double.parse(AuthServices.getUserInformation()['money_saved']);
+  double _moneySaved = double.parse(AuthServices.getUserInformation()['money_saved'].toString());
   double get moneySaved => _moneySaved;
 
   String _motivation = AuthServices.getUserInformation()['original_motivation']; // Initieer de motivatie als een lege string
@@ -59,7 +59,7 @@ class MoneySavedModel with ChangeNotifier {
 
     try {
       final response = await http.put(
-        Uri.parse(baseURL + 'users/update/' + AuthServices.getUserInformation()['id'].toString()),
+        Uri.parse('${baseURL}users/update/${AuthServices.getUserInformation()['id']}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -82,7 +82,7 @@ class MoneySavedModel with ChangeNotifier {
 
     try {
       final response = await http.put(
-        Uri.parse(baseURL + 'users/update/' + AuthServices.getUserInformation()['id'].toString()),
+        Uri.parse('${baseURL}users/update/${AuthServices.getUserInformation()['id']}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -106,7 +106,7 @@ class MoneySavedModel with ChangeNotifier {
 
     try {
       final response = await http.put(
-        Uri.parse(baseURL + 'users/update/' + AuthServices.getUserInformation()['id'].toString()),
+        Uri.parse('${baseURL}users/update/${AuthServices.getUserInformation()['id']}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -141,13 +141,10 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (selectedIndex) {
       case 0:
         page = GeneratorPage();
-        break;
       case 1:
         page = StoryPage();
-        break;
       case 2:
         page = MedalsPage();
-        break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -181,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         // Doe de API-aanroep om de gebruiker te verwijderen
         final response = await http.delete(
-          Uri.parse(baseURL + 'users/delete/' + userId),
+          Uri.parse('${baseURL}users/delete/$userId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -273,7 +270,7 @@ class _GeneratorPageState extends State<GeneratorPage> {
 
   @override
   Widget build(BuildContext context) {
-    var auth_service = AuthServices();
+    var authService = AuthServices();
 
 
     return Consumer<MoneySavedModel>(
@@ -323,9 +320,7 @@ class _GeneratorPageState extends State<GeneratorPage> {
               child: InputCard(
                 hintText: 'Enter saved money here...',
                 inputType: InputType.numeric,
-                onIntegerInput: (value) async {
-                  await moneySavedModel.updateMoneySaved(value as double);
-                },
+                onIntegerInput: (value) async => await moneySavedModel.updateMoneySaved(value.toDouble()),
               ),
             ),
             Padding(
@@ -422,9 +417,7 @@ class MedalsPage extends StatelessWidget {
   }
 
   Future<List<dynamic>> fetchMedals() async {
-    final response = await http.get(Uri.parse(baseURL +
-        'users/showMedals/' +
-        AuthServices.getUserInformation()['id'].toString()));
+    final response = await http.get(Uri.parse('${baseURL}users/showMedals/${AuthServices.getUserInformation()['id']}'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -435,7 +428,7 @@ class MedalsPage extends StatelessWidget {
 }
 
 Future<List<dynamic>> fetchStory() async {
-  final response = await http.get(Uri.parse(baseURL + 'addictstories/all'));
+  final response = await http.get(Uri.parse('${baseURL}addictstories/all'));
 
   if (response.statusCode == 200) {
     return json.decode(response.body);

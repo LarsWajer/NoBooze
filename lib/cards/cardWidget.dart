@@ -16,7 +16,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 300.0,
       height: 150.0,
       child: Card(
